@@ -1,0 +1,9 @@
+{
+  "backend": "baton",
+  "init": {
+    "c1z_path": "./sync.c1z",
+    "agent_to_principal": {
+      "release-agent": "alice"
+    }
+  }
+}

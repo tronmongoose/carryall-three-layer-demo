@@ -85,6 +85,14 @@ async def run_scenario(
         agent_to_principal={agent_id: principal},
     )
 
+    meta = backend.get_metadata(resource_uri, agent_id)
+    if principal not in meta.allowed_agents:
+        allowed = ", ".join(meta.allowed_agents) if meta.allowed_agents else "(none)"
+        print(f"Envelope:   not issued — Baton graph has no grant for '{principal}' on {resource_uri}")
+        print(f"Decision:   [DENY ] allowed principals per Baton: {allowed}")
+        print(f"  rule:     baton_no_grant (pre-authorization)")
+        return
+
     private_key, public_key = generate_key_pair()
     root = build_root(private_key, agent_id)
 
@@ -147,9 +155,10 @@ async def main() -> None:
         resource_uri="slos://vaults/acme/api",
     )
 
-    print("\nBoth envelopes were cryptographically issued. The DENY didn't")
-    print("require revoking a long-lived token — the capability was never issued")
-    print("in a form that would authorize the unauthorized action.")
+    print("\nThe ALLOW scenario compiled and signed a minimum-scope capability.")
+    print("The DENY scenario never compiled one — the graph said no, so no")
+    print("envelope authorizing that action was ever issued. The unauthorized")
+    print("action was cryptographically impossible, not detected after the fact.")
 
 
 if __name__ == "__main__":

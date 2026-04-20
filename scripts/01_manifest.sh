@@ -5,7 +5,7 @@
 # this as a human — no API integration. The three-layer story says Layer 1
 # is provided today by Manifold; we don't rebuild it.
 
-set -eu
+set -euo pipefail
 
 cat <<'MSG'
 -- Layer 1: Manifold Manifest (supply chain intelligence) --

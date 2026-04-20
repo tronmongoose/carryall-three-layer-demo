@@ -4,11 +4,10 @@ Runnable companion to `ARCHITECTURE.md`. Ten minutes. CLI-driven. No React, no d
 
 ## What it shows
 
-Each script maps to one layer of the thesis:
+The demo runs Layers 2 and 3. Layer 1 (agent discovery / supply chain) is narrated, not executed — the argument is that it exists, not that we rebuild it.
 
 | # | Script | Layer | Who owns it |
 |---|---|---|---|
-| 1 | `scripts/01_manifest.sh` | Supply chain intelligence | Manifold (consumed, not rebuilt) |
 | 2 | `scripts/02_baton.py` | Entitlement graph | ConductorOne Baton (`.c1z`) |
 | 3 | `scripts/03_carryall.py` | Runtime authorization | Carryall (Authority Runtime + Baton adapter) |
 
@@ -41,7 +40,7 @@ make setup
 make demo
 ```
 
-Each layer pauses between runs so you can narrate. `make layer1`, `make layer2`, `make layer3` run them individually. `make verify` runs layers 2+3 non-interactively as a smoke test.
+The demo pauses between layers so you can narrate. `make layer2` and `make layer3` run them individually. `make verify` runs both non-interactively as a smoke test.
 
 ## The `.c1z`
 
@@ -73,7 +72,6 @@ ARCHITECTURE.md          The strategic one-pager
 talk_track.md            10-minute narration, timed
 Makefile                 `make demo` and friends
 backend.json             CARRYALL_SLOS_CONFIG
-scripts/01_manifest.sh   Layer 1: open Manifest in the browser
 scripts/02_baton.py      Layer 2: regenerate sync.c1z and preview it
 scripts/03_carryall.py   Layer 3: run the ALLOW and DENY scenarios
 vendor/_fixture.py       Synthetic .c1z builder (same shape as baton-github output)
@@ -81,4 +79,4 @@ vendor/_fixture.py       Synthetic .c1z builder (same shape as baton-github outp
 
 ## What to say if things break
 
-The demo is the backup, not the centerpiece — `ARCHITECTURE.md` is the primary artifact. If any script fails on demo day: skip to layer 3, show the `backend.json` + `agent_to_principal` mapping, and describe the ALLOW/DENY flow from the talk track. The architecture argument doesn't depend on live output.
+The demo is the backup, not the centerpiece — `ARCHITECTURE.md` is the primary artifact. If any script fails on demo day: skip to Layer 3, show the `backend.json` + `agent_to_principal` mapping, and describe the ALLOW/DENY flow from the talk track. The architecture argument doesn't depend on live output.

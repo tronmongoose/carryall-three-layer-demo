@@ -2,14 +2,11 @@ PYTHON ?= python3
 AUTHORITY_RUNTIME_SRC ?= ../authority-runtime-python
 CARRYALL_BATON_SRC    ?= ../carryall-baton-backend
 
-.PHONY: demo setup clean layer1 layer2 layer3 verify
+.PHONY: demo setup clean layer2 layer3 verify
 
-demo: layer1 pause layer2 pause layer3
+demo: layer2 pause layer3
 	@echo
 	@echo "--- end of demo ---"
-
-layer1:
-	@bash scripts/01_manifest.sh
 
 layer2:
 	@$(PYTHON) scripts/02_baton.py

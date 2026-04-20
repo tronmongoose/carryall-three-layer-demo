@@ -1,4 +1,6 @@
-PYTHON ?= /Users/erikh/code/carryall/authority-runtime-python/.venv/bin/python
+PYTHON ?= python3
+AUTHORITY_RUNTIME_SRC ?= ../authority-runtime-python
+CARRYALL_BATON_SRC    ?= ../carryall-baton-backend
 
 .PHONY: demo setup clean layer1 layer2 layer3 verify
 
@@ -25,8 +27,8 @@ verify:
 	@echo "ok"
 
 setup:
-	@$(PYTHON) -m pip install -e /Users/erikh/code/carryall/authority-runtime-python
-	@$(PYTHON) -m pip install -e /Users/erikh/code/carryall-baton-backend
+	@$(PYTHON) -m pip install -e $(AUTHORITY_RUNTIME_SRC)
+	@$(PYTHON) -m pip install -e $(CARRYALL_BATON_SRC)
 
 clean:
 	@rm -f sync.c1z

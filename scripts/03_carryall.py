@@ -29,9 +29,10 @@ from authority_runtime import (
     generate_key_pair,
     validate_envelope,
 )
-from authority_runtime.backends import Decision, load_backend
+from authority_runtime.backends import Decision
 from authority_runtime.compiler import FakeCompiler
 from authority_runtime.envelope import narrow_authority
+from carryall_baton import BatonBackend
 
 
 DEMO_ROOT = Path(__file__).resolve().parents[1]
@@ -73,11 +74,10 @@ async def run_scenario(
 ) -> None:
     print(f"\n=== Scenario: {label} ===")
     print(f"Agent:      {agent_id}  (maps to baton principal '{principal}')")
-    print(f"Intent:     audit the target repo for stale access")
+    print("Intent:     audit the target repo for stale access")
     print(f"URI:        {resource_uri}")
 
     # Re-load backend per scenario so the principal mapping is scenario-specific.
-    from carryall_baton import BatonBackend
     with open(BACKEND_CONFIG) as f:
         base_init = json.load(f)["init"]
     backend = BatonBackend(

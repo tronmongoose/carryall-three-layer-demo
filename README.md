@@ -34,6 +34,8 @@ Install both in the authority-runtime venv (or any venv you point `PYTHON` at):
 make setup
 ```
 
+This also installs [`rich`](https://rich.readthedocs.io/) for the terminal UI (panels, trees, syntax-highlighted envelope JSON).
+
 ## Run
 
 ```bash

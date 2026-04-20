@@ -24,6 +24,7 @@ verify:
 	@echo "ok"
 
 setup:
+	@$(PYTHON) -m pip install rich
 	@$(PYTHON) -m pip install -e $(AUTHORITY_RUNTIME_SRC)
 	@$(PYTHON) -m pip install -e $(CARRYALL_BATON_SRC)
 

@@ -50,7 +50,7 @@ Carryall is a runtime policy decision point and policy enforcement point for age
 
 The entire system is built on a key insight: **the entitlement graph is the right scope source.** ConductorOne has already done the hard work of normalizing identity and permission data across hundreds of systems via Baton. Carryall consumes that graph as its source of truth. There is no second graph to maintain, no parallel data model, no integration drift.
 
-The working prototype demonstrates this end-to-end against `baton-github`, with a 100-line bridge that reads the standard `.c1z` output and exposes it to the Carryall PDP. Adding any other Baton connector requires no changes to the Carryall code.
+The working prototype demonstrates this end-to-end against `baton-github`, with a ~270-line adapter whose seven Protocol methods are the only surface Carryall touches. Adding any other Baton connector requires no changes to the Carryall code.
 
 ---
 

@@ -16,7 +16,6 @@ Prints a signed envelope and both decisions.
 from __future__ import annotations
 
 import asyncio
-import json
 from pathlib import Path
 
 from authority_runtime import (
@@ -29,10 +28,9 @@ from authority_runtime import (
     generate_key_pair,
     validate_envelope,
 )
-from authority_runtime.backends import Decision
+from authority_runtime.backends import Decision, load_backend
 from authority_runtime.compiler import FakeCompiler
 from authority_runtime.envelope import narrow_authority
-from carryall_baton import BatonBackend
 
 
 DEMO_ROOT = Path(__file__).resolve().parents[1]
@@ -77,13 +75,11 @@ async def run_scenario(
     print("Intent:     audit the target repo for stale access")
     print(f"URI:        {resource_uri}")
 
-    # Re-load backend per scenario so the principal mapping is scenario-specific.
-    with open(BACKEND_CONFIG) as f:
-        base_init = json.load(f)["init"]
-    backend = BatonBackend(
-        c1z_path=base_init["c1z_path"],
-        agent_to_principal={agent_id: principal},
-    )
+    # load_backend() resolves "baton" through the authority_runtime.backends
+    # entry-point group registered by carryall-baton-backend — the demo never
+    # imports BatonBackend directly. Override the principal per scenario.
+    backend = load_backend(str(BACKEND_CONFIG))
+    backend.agent_to_principal[agent_id] = principal
 
     meta = backend.get_metadata(resource_uri, agent_id)
     if principal not in meta.allowed_agents:

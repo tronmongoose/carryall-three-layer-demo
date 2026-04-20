@@ -28,7 +28,7 @@ Run `make layer3`. Two scenarios print.
 >
 > Scenario two: same agent, mapped to Charlie. Charlie has no grant on `acme/api`. check_access returns DENY. No envelope authorizing that action was ever issued. This is the point: **the unauthorized action was cryptographically impossible, not because someone detected it and responded, but because the capability never existed**.
 
-> The thing I want to underscore: the adapter that bridges Baton into Carryall is a fifty-line class that implements a seven-method Protocol. I added that Protocol to authority-runtime itself in the 0.4.0 release, right before this conversation. Any Baton connector — Okta, Snowflake, Salesforce — plugs in the same way. No Carryall code changes.
+> The thing I want to underscore: the adapter that bridges Baton into Carryall is a ~270-line class whose seven Protocol methods are the only surface Carryall touches. I added that Protocol to authority-runtime itself in the 0.4.0 release, right before this conversation. Any Baton connector — Okta, Snowflake, Salesforce — plugs in the same way. No Carryall code changes.
 
 ## 8:30 – 10:00 — The ask
 

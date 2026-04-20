@@ -1,54 +1,49 @@
-# Talk track — 10 minutes
+# Talk track — 5 minutes
 
-Timings are targets; trim ruthlessly.
+Only use this if asked to show something, or if the conversation naturally lands on agent authorization. Not a pitch. Time it with a stopwatch at least once before the meeting.
 
-## 0:00 – 0:30 — Frame
+## 0:00 – 0:45 — Frame the artifact honestly
 
-> In ten minutes I want to lay out a thesis for an agent governance product line at C1, and show you the working prototype. Before I get to identity, let me describe the problem enterprises are actually walking into.
+> Quick context before I open anything: I built this before C1 launched AIAM in March. I kept working on it after because the exercise kept teaching me things I couldn't get from reading blog posts or specs. What I want to show you isn't a product pitch — it's a prototype. Five minutes. Then I'd love to talk about what I learned from building it, because I think some of the open questions in this space are more interesting than the solved ones.
 
-## 0:30 – 1:30 — The problem
+## 0:45 – 1:30 — Layer 2: the entitlement graph
 
-> Two things enterprises don't have today, and both of them are prior to any identity question.
+Run `make layer2`.
+
+> This is a synthetic `.c1z` — same schema `baton-github` emits, same tables, just populated from a fixture instead of a real org so it runs anywhere. Three users, three repos, nine grants. Alice has admin on `acme/api`. Charlie doesn't. That's the shape that matters for what comes next. I didn't rebuild Baton — I'm consuming its output through the same schema your connectors already produce.
+
+## 1:30 – 3:30 — Layer 3: the prototype
+
+Run `make layer3`.
+
+> Two scenarios. Agent declares intent in natural language — "audit the target repo for stale access." A compiler narrows the agent's parent authority down to the minimum scopes that satisfy that intent. The result is wrapped in an Ed25519-signed envelope with a 300-second TTL and the agent's identity. That envelope is the capability.
 >
-> One: they don't know where all their AI agents, models, and apps are. Shadow AI. Somebody in marketing wires a GPT into a Google Doc. Somebody in engineering deploys a coding agent against production. Somebody in support spins up a chatbot with a database connection. Nobody has the inventory. You can't govern what you can't see.
+> Scenario one: agent maps to Alice. Alice has admin on `acme/api`. Envelope gets compiled and signed. Check-access returns ALLOW with the Baton grant as the reason. Signature is right there.
 >
-> Two: even for the agents they do know about, they don't know where the vulnerabilities are in the tools those agents access. Every agent loads skills, MCP servers, model providers, API clients. That's a supply chain. In the public data, roughly one in twelve skills in the largest agent-skill index is confirmed malicious. You can't trust what you haven't vetted.
+> Scenario two: same agent, mapped to Charlie. No grant on `acme/api`. Check-access short-circuits before envelope compilation. No capability authorizing that action was ever issued. Not rejected after the fact — never created. That's the distinction this primitive is trying to make.
+
+## 3:30 – 5:00 — What building this taught me
+
+> Three things I want to say about what I learned, because I think they're the interesting part.
 >
-> Those two gaps — inventory and vulnerability — are Layer 1 of the stack. They're necessary. Manifold and a handful of others are building that layer. I'm not rebuilding it.
-
-## 1:30 – 2:00 — The three-layer response
-
-> Governance needs three layers. Layer 1 is what I just described — discovery and supply chain, provided today by Manifold and peers. Layer 2 is the entitlement graph: who should have access to what. C1 already owns this through Baton. Layer 3 is runtime authorization: what can this specific agent do, right now, for this specific task. That layer is unclaimed. The rest of this demo is Layers 2 and 3, running.
-
-## 2:00 – 4:00 — Layer 2: Baton (entitlement graph)
-
-Run `make layer2`. Script regenerates `sync.c1z` and prints its contents.
-
-> Layer 2 is the entitlement graph — who should have access to what. ConductorOne already owns this. Baton is the open-source piece: connectors that dump any source system into a standard `.c1z` file. I'm generating a synthetic one here — same schema, same query shape as `baton-github` would produce against a real org. Three users, three repos, nine grants. Alice has admin on `acme/api`. Charlie has read on `acme/frontend` only. In production this file comes from `baton-github` against the customer's real GitHub. The adapter doesn't care.
-
-## 4:00 – 8:00 — Layer 3: Carryall (runtime authorization)
-
-Run `make layer3`. Two scenarios print.
-
-> Layer 3 is what I built. Runtime authorization. The agent declares intent in natural language. A compiler reads the entitlement graph from Layer 2 and produces the minimum set of scopes the agent needs to fulfill that intent. Those scopes are wrapped in an Ed25519-signed envelope with a 300-second TTL and the agent's identity. The envelope is the capability.
+> One: the crypto is not the hard part. Ed25519 signing is free at this scale. If this architecture has a weakness, it isn't the envelope — it's the intent-to-scope compilation step. That's the messiest piece of the pipeline, and I don't have a good answer for adversarial intents. I'd genuinely like to know how AIAM handles that — my guess is it sidesteps the problem by operating at MCP-server granularity rather than per-action, and I think that's probably the right call for a platform product.
 >
-> Scenario one: the release agent maps to Alice. Alice has admin on `acme/api`. The envelope is issued, signed, and check_access returns ALLOW with the baton grant as the reason. You can see the signature right there.
+> Two: I started thinking cryptographic capabilities were interesting because of the runtime enforcement. After building it, I think the hash-chained audit trail is probably the more valuable half. Regulators don't ask "can you verify this envelope offline?" — they ask "show me evidence for this decision." The signed envelope is the means; the evidentiary chain is what customers pay for.
 >
-> Scenario two: same agent, mapped to Charlie. Charlie has no grant on `acme/api`. check_access returns DENY. No envelope authorizing that action was ever issued. This is the point: **the unauthorized action was cryptographically impossible, not because someone detected it and responded, but because the capability never existed**.
+> And three — the one that matters most — the hardest problem in this whole space isn't the runtime primitive. It's the entitlement graph underneath. I could not have built this prototype in two days if I had to also build Baton. The reason the runtime layer is interesting is *because* Baton exists. The five years of connector work you've done is what makes anyone's runtime primitive useful or useless. That's the moat, and I don't think it's the agent layer — I think it's the graph.
 
-> The thing I want to underscore: the adapter that bridges Baton into Carryall is a ~270-line class whose seven Protocol methods are the only surface Carryall touches. I added that Protocol to authority-runtime itself in the 0.4.0 release, right before this conversation. Any Baton connector — Okta, Snowflake, Salesforce — plugs in the same way. No Carryall code changes.
-
-## 8:00 – 10:00 — The ask
-
-> Three things I'm proposing, in priority order:
-> 1. The role we're already discussing — VP Product, path to CPO.
-> 2. Bring Carryall into C1 as the foundation of an agent product line. I built it on my own time, no employer IP. Terms are negotiable as part of the offer.
-> 3. A 90-day plan to ship a closed beta: three existing C1 customers running coding agents in production, Carryall against their existing Baton-synced graph, publish the measured blocked-vs-allowed rates as a category-defining piece of research with C1's brand on it.
->
-> The rest is execution.
+---
 
 ## Backup notes
 
-- If `make layer2` fails: the `.c1z` file might already exist from a prior run; `make clean && make layer2`.
-- If `make layer3` fails on ALLOW: show `backend.json`, narrate the flow, skip to the architecture doc.
-- Do not debug live. The argument is in the architecture doc, the demo is the garnish.
+- If `make layer2` fails: the `.c1z` might already exist from a prior run; `make clean && make layer2`.
+- If `make layer3` fails on ALLOW: show `backend.json`, narrate the flow, skip to NOTES.md.
+- If live demo is entirely off the table: offer NOTES.md as the artifact and a 3-min Loom as follow-up.
+- Do not debug live. If something breaks, move to the conversation.
+
+## What to avoid saying
+
+- "C1 should build this." (They did — it's called AIAM.)
+- "This is Layer 3." (Map was pre-AIAM; drop the layer framing unless asked.)
+- Anything that sounds like a 90-day execution plan.
+- Any framing that compares this prototype to AIAM as a product. Compare to it only as a *learning experience*.

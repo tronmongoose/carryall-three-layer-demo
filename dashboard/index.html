@@ -25,6 +25,8 @@
     --brand: #7c3aed;
     --baton: #60a5fa;
     --baton-bg: rgba(96, 165, 250, 0.10);
+    --aiam: #22d3ee;
+    --aiam-bg: rgba(34, 211, 238, 0.10);
     --carryall: #a78bfa;
     --carryall-bg: rgba(167, 139, 250, 0.10);
   }
@@ -248,19 +250,20 @@
 
   .arch-cols {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
     margin-bottom: 20px;
   }
-  @media (max-width: 900px) { .arch-cols { grid-template-columns: 1fr; } }
+  @media (max-width: 1080px) { .arch-cols { grid-template-columns: 1fr; } }
 
   .layer-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 20px 22px;
+    padding: 18px 20px;
   }
   .layer-card.baton { border-top: 3px solid var(--baton); }
+  .layer-card.aiam { border-top: 3px solid var(--aiam); }
   .layer-card.carryall { border-top: 3px solid var(--carryall); }
 
   .layer-label {
@@ -274,6 +277,7 @@
     margin-bottom: 10px;
   }
   .layer-label.baton { background: var(--baton-bg); color: var(--baton); }
+  .layer-label.aiam { background: var(--aiam-bg); color: var(--aiam); }
   .layer-label.carryall { background: var(--carryall-bg); color: var(--carryall); }
 
   .layer-card h3 {
@@ -330,6 +334,7 @@
     margin-bottom: 4px;
   }
   .qa.baton .q { color: var(--baton); }
+  .qa.aiam .q { color: var(--aiam); }
   .qa.carryall .q { color: var(--carryall); }
 
   .handoff-card {
@@ -455,6 +460,63 @@
   .tl-badge.deny  { background: var(--deny-bg);  color: var(--deny); }
   .tl-badge.warn  { background: var(--warn-bg);  color: var(--warn); }
 
+  /* Net-new-to-AIAM callout */
+  .netnew-callout {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(34, 211, 238, 0.04));
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--carryall);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .nn-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--carryall);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .nn-body {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .nn-body strong { font-weight: 600; }
+  .nn-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 960px) { .nn-grid { grid-template-columns: 1fr 1fr; } }
+  .nn-item {
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .nn-head {
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .nn-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .nn-caveat {
+    color: var(--text-dim);
+    font-size: 11.5px;
+    font-style: italic;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    line-height: 1.5;
+  }
+
   /* Inventory */
   .inv-row {
     padding: 10px 18px;
@@ -506,107 +568,131 @@
 
   <!-- ========================= TAB: ARCHITECTURE ========================= -->
   <section class="tab-content active" id="tab-arch">
-    <h1>How Baton and Carryall fit together</h1>
+    <h1>Where this fits — post-AIAM</h1>
     <div class="page-sub">
-      Baton is ConductorOne's existing entitlement-graph product. Carryall is the runtime layer on top.
-      The boundary is clean: Baton answers design-time questions; Carryall answers request-time questions.
+      ConductorOne ships two layers today: Baton (the entitlement graph) and AIAM (agent access management, March 2026). Carryall is a prototype that explores a further runtime primitive underneath — per-action capability issuance. Whether that primitive belongs inside AIAM, under it, or nowhere, is an open question I've been sitting with.
     </div>
 
     <!-- Horizontal flow -->
     <div class="arch-flow">
-      <svg viewBox="0 0 1120 240" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1120 260" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="af-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M0,0 L10,5 L0,10 Z" fill="#545a68"/>
           </marker>
         </defs>
 
-        <!-- Boxes (y centered at 90) -->
         <!-- Source Systems -->
-        <rect x="20"  y="60" width="180" height="100" rx="8" fill="#13151b" stroke="#252935"/>
-        <text x="110" y="90" fill="#8a8f9c" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1">SOURCE SYSTEMS</text>
-        <text x="110" y="118" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">GitHub · Okta</text>
-        <text x="110" y="138" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">Snowflake · …</text>
+        <rect x="20" y="70" width="170" height="100" rx="8" fill="#13151b" stroke="#252935"/>
+        <text x="105" y="100" fill="#8a8f9c" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1">SOURCE SYSTEMS</text>
+        <text x="105" y="128" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">GitHub · Okta</text>
+        <text x="105" y="148" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">Snowflake · …</text>
 
-        <!-- Baton -->
-        <rect x="260" y="50" width="240" height="120" rx="8" fill="#13151b" stroke="#60a5fa" stroke-width="2"/>
-        <text x="380" y="80" fill="#60a5fa" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">BATON · C1 OWNS</text>
-        <text x="380" y="108" fill="#e7e9ee" font-size="15" font-weight="600" text-anchor="middle">Entitlement Graph</text>
-        <text x="380" y="128" fill="#8a8f9c" font-size="11.5" text-anchor="middle" font-family="JetBrains Mono, monospace">.c1z · v1_grants</text>
-        <text x="380" y="148" fill="#545a68" font-size="10" text-anchor="middle" font-style="italic">sync-time · hourly</text>
+        <!-- ConductorOne (combined Baton + AIAM) -->
+        <rect x="240" y="40" width="260" height="180" rx="8" fill="#13151b" stroke="#5eead4" stroke-width="1.5"/>
+        <text x="370" y="66" fill="#5eead4" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">CONDUCTORONE · SHIPS TODAY</text>
+
+        <!-- Baton sub-box -->
+        <rect x="258" y="80" width="224" height="58" rx="6" fill="#0f1217" stroke="#60a5fa"/>
+        <text x="370" y="98" fill="#60a5fa" font-size="9" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">BATON</text>
+        <text x="370" y="116" fill="#e7e9ee" font-size="13" font-weight="600" text-anchor="middle">Entitlement Graph</text>
+        <text x="370" y="130" fill="#545a68" font-size="9.5" text-anchor="middle" font-style="italic">design-time · sync</text>
+
+        <!-- AIAM sub-box -->
+        <rect x="258" y="148" width="224" height="58" rx="6" fill="#0f1217" stroke="#22d3ee"/>
+        <text x="370" y="166" fill="#22d3ee" font-size="9" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">AIAM · MAR 2026</text>
+        <text x="370" y="184" fill="#e7e9ee" font-size="13" font-weight="600" text-anchor="middle">Agent Access Mgmt</text>
+        <text x="370" y="198" fill="#545a68" font-size="9.5" text-anchor="middle" font-style="italic">3,000 hosted MCP servers</text>
 
         <!-- Carryall -->
-        <rect x="560" y="50" width="240" height="120" rx="8" fill="#13151b" stroke="#a78bfa" stroke-width="2"/>
-        <text x="680" y="80" fill="#a78bfa" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">CARRYALL · C1 SHOULD OWN</text>
-        <text x="680" y="108" fill="#e7e9ee" font-size="15" font-weight="600" text-anchor="middle">Runtime PDP</text>
-        <text x="680" y="128" fill="#8a8f9c" font-size="11.5" text-anchor="middle" font-family="JetBrains Mono, monospace">signed envelopes · Ed25519</text>
-        <text x="680" y="148" fill="#545a68" font-size="10" text-anchor="middle" font-style="italic">request-time · ~3 ms</text>
+        <rect x="560" y="70" width="240" height="100" rx="8" fill="#13151b" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4,3"/>
+        <text x="680" y="96" fill="#a78bfa" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1" font-weight="700">CARRYALL · LEARNING ARTIFACT</text>
+        <text x="680" y="122" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">Per-action PDP</text>
+        <text x="680" y="140" fill="#8a8f9c" font-size="11" text-anchor="middle" font-family="JetBrains Mono, monospace">signed envelopes · Ed25519</text>
+        <text x="680" y="156" fill="#545a68" font-size="10" text-anchor="middle" font-style="italic">request-time · ~3 ms</text>
 
         <!-- Resource -->
-        <rect x="860" y="60" width="180" height="100" rx="8" fill="#13151b" stroke="#252935"/>
-        <text x="950" y="90" fill="#8a8f9c" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1">PROTECTED RESOURCE</text>
-        <text x="950" y="118" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">repo · vault</text>
-        <text x="950" y="138" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">API · DB</text>
+        <rect x="860" y="70" width="180" height="100" rx="8" fill="#13151b" stroke="#252935"/>
+        <text x="950" y="100" fill="#8a8f9c" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle" letter-spacing="1">PROTECTED RESOURCE</text>
+        <text x="950" y="128" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">repo · vault</text>
+        <text x="950" y="148" fill="#e7e9ee" font-size="14" font-weight="600" text-anchor="middle">API · DB</text>
 
-        <!-- Arrows + labels -->
-        <line x1="205" y1="110" x2="255" y2="110" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
-        <text x="230" y="100" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">baton connectors</text>
+        <!-- Arrows -->
+        <line x1="195" y1="120" x2="235" y2="120" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
+        <text x="215" y="110" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">connectors</text>
 
-        <line x1="505" y1="110" x2="555" y2="110" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
-        <text x="530" y="100" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">graph read</text>
-        <text x="530" y="128" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">per action</text>
+        <line x1="505" y1="120" x2="555" y2="120" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
+        <text x="530" y="110" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">graph read</text>
+        <text x="530" y="138" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">per action</text>
 
-        <line x1="805" y1="110" x2="855" y2="110" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
-        <text x="830" y="100" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">envelope</text>
-        <text x="830" y="128" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">verified</text>
+        <line x1="805" y1="120" x2="855" y2="120" stroke="#545a68" stroke-width="1.5" marker-end="url(#af-arrow)"/>
+        <text x="830" y="110" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">envelope</text>
+        <text x="830" y="138" fill="#545a68" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle">verified</text>
 
-        <!-- Agent caller under Carryall -->
-        <text x="680" y="208" fill="#5eead4" font-size="11" font-family="JetBrains Mono, monospace" text-anchor="middle">↑ agent intent arrives here</text>
+        <text x="680" y="240" fill="#a78bfa" font-size="10.5" font-family="JetBrains Mono, monospace" text-anchor="middle" font-style="italic">dashed border = prototype, not shipped</text>
       </svg>
     </div>
 
-    <!-- Responsibility split -->
+    <!-- Responsibility split: 3 cards -->
     <div class="arch-cols">
 
       <div class="layer-card baton">
-        <span class="layer-label baton">C1 · today</span>
+        <span class="layer-label baton">C1 · shipped</span>
         <h3>Baton</h3>
-        <div class="who">The entitlement graph that answers <strong>design-time</strong> questions about access.</div>
+        <div class="who">The entitlement graph — what identities <strong>should</strong> have access to what.</div>
 
         <div class="owns">
           <div class="owns-head">What it powers</div>
           <ul>
-            <li>Extraction from source systems via baton connectors</li>
-            <li>Normalization into <code>v1_resources</code> / <code>v1_entitlements</code> / <code>v1_grants</code></li>
-            <li>Access reviews, birthright policies, JIT requests</li>
-            <li>Identity lifecycle and audit reporting</li>
+            <li>Extraction via baton connectors</li>
+            <li>Normalized <code>v1_grants</code> schema</li>
+            <li>Access reviews · IGA workflows</li>
           </ul>
         </div>
 
         <div class="qa baton">
-          <div class="q">Baton answers</div>
+          <div class="q">Answers</div>
           Should <em>alice</em> have admin on <code>acme/api</code>?
         </div>
       </div>
 
-      <div class="layer-card carryall">
-        <span class="layer-label carryall">C1 · proposed</span>
-        <h3>Carryall</h3>
-        <div class="who">The runtime Policy Decision Point that answers <strong>request-time</strong> questions for every agent action.</div>
+      <div class="layer-card aiam">
+        <span class="layer-label aiam">C1 · shipped · mar 2026</span>
+        <h3>AIAM</h3>
+        <div class="who">Agent access management — which agents <strong>can reach</strong> which systems at all.</div>
 
         <div class="owns">
           <div class="owns-head">What it powers</div>
           <ul>
-            <li>Reading the Baton graph on every agent request</li>
-            <li>Compiling minimum-scope capabilities from stated intent</li>
-            <li>Signing envelopes (Ed25519) with a 300-second TTL</li>
-            <li>Tamper-evident audit log for every issued capability</li>
+            <li>3,000 hosted MCP servers</li>
+            <li>Agent-to-server access gating</li>
+            <li>Five years of connector work as moat</li>
+          </ul>
+        </div>
+
+        <div class="qa aiam">
+          <div class="q">Answers</div>
+          Is this agent allowed to reach this MCP server?
+        </div>
+      </div>
+
+      <div class="layer-card carryall">
+        <span class="layer-label carryall">prototype · learning artifact</span>
+        <h3>Carryall</h3>
+        <div class="who">A per-action capability primitive — cryptographically-bound, TTL-short, auditable per call.</div>
+
+        <div class="owns">
+          <div class="owns-head">What it explores</div>
+          <ul>
+            <li>Intent → minimum-scope envelope</li>
+            <li>Ed25519 signature per action, 300s TTL</li>
+            <li>Hash-chained audit trail</li>
           </ul>
         </div>
 
         <div class="qa carryall">
-          <div class="q">Carryall answers</div>
-          Can the <em>release-agent</em> acting as <em>alice</em> audit <code>acme/api</code> <em>right now</em>, for this task?
+          <div class="q">Asks</div>
+          Can this agent, as this principal, do this exact action <em>right now</em>?
         </div>
       </div>
 
@@ -615,13 +701,14 @@
     <!-- The handoff -->
     <div class="handoff-card">
       <div class="handoff-head">
-        <h3>The handoff</h3>
+        <h3>How the prototype consumes Baton</h3>
         <span class="pill">~270-line adapter · 7-method Protocol</span>
       </div>
       <div class="handoff-body">
         Carryall never reaches into Baton's internals. It calls a <strong>seven-method Protocol</strong>
-        that was added to <code>authority-runtime</code> in v0.4.0. Any Baton connector — GitHub,
-        Okta, Snowflake — plugs in through the same interface with zero Carryall code changes.
+        added to <code>authority-runtime</code> in v0.4.0. Any Baton connector plugs in through the same
+        interface with zero Carryall code changes. This is the part of the exercise I'm most confident about —
+        the graph is the right source, and consuming it through a narrow interface works.
       </div>
       <pre class="handoff-code"><span class="c-cmt"># carryall-baton-backend · BatonBackend implements the Protocol</span>
 <span class="c-kw">class</span> <span class="c-fn">BatonBackend</span>:
@@ -639,7 +726,36 @@ decision = backend.<span class="c-fn">check_access</span>(envelope, <span class=
   <section class="tab-content" id="tab-dash">
     <h1>Agents</h1>
     <div class="page-sub">
-      What the full product surface could look like — C1's existing IGA surface, extended with agent identities.
+      Speculative product surface for a Carryall-style per-action primitive — what it would look like if productized alongside AIAM. Everything below is a design sketch, not a proposal.
+    </div>
+
+    <!-- Net-new-to-AIAM callout -->
+    <div class="netnew-callout">
+      <div class="nn-label">What this prototype adds to AIAM</div>
+      <div class="nn-body">
+        AIAM manages which agents can reach which MCP servers. This prototype explores a <strong>finer-grained primitive underneath</strong>: a signed, scope-narrowed capability bound to each individual action, not each connection.
+      </div>
+      <div class="nn-grid">
+        <div class="nn-item">
+          <div class="nn-head">Per-action Ed25519 envelopes</div>
+          <div class="nn-text">Every tool call carries a cryptographically-signed capability with a 300-second TTL, not just a scope check.</div>
+        </div>
+        <div class="nn-item">
+          <div class="nn-head">Hash-chained audit</div>
+          <div class="nn-text">Each decision links to the prior one. The evidentiary log is tamper-evident, not just append-only.</div>
+        </div>
+        <div class="nn-item">
+          <div class="nn-head">Intent → minimum scope</div>
+          <div class="nn-text">Agent states intent in natural language; PDP narrows to the smallest scope that satisfies it.</div>
+        </div>
+        <div class="nn-item">
+          <div class="nn-head">Sub-second capability denial</div>
+          <div class="nn-text">Out-of-scope actions are cryptographically impossible — the capability never compiles — not rejected at the PEP.</div>
+        </div>
+      </div>
+      <div class="nn-caveat">
+        Open question: adversarial intent handling is unsolved. AIAM's MCP-server-level granularity sidesteps this problem entirely by not trying to compile intent at all — probably the right call for a platform product.
+      </div>
     </div>
 
     <!-- Hero stats -->

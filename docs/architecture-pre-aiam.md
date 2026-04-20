@@ -1,9 +1,10 @@
 # Agent Governance: The Three-Layer Stack
 
+> **Archived — pre-AIAM thinking.** I wrote this in early April 2026, before ConductorOne launched AIAM. The core argument — that agent governance needs distinct layers and that the entitlement graph is the right scope source — still holds. But the market framing (specifically the claim that "Layer 3 is unclaimed") is out of date. C1 shipped in this space in March. I'm keeping this doc in the repo because it's honest about what I believed when I started building, and the shift in framing is part of what I learned. Current thinking lives in `NOTES.md`.
+
 **Author:** [Your name]
-**For:** ConductorOne, [CEO name]
-**Date:** April 2026
-**Status:** Working prototype — see demo
+**Date:** April 2026 (archived April 20, 2026 after AIAM launch)
+**Status:** Historical — see `NOTES.md` for current thinking
 
 ---
 

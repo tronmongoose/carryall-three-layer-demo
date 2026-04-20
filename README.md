@@ -1,10 +1,12 @@
-# AuthN/AuthZ demo — three layers of agent governance
+# Agent authorization prototype
 
-Runnable companion to `ARCHITECTURE.md`. Ten minutes. CLI-driven. No React, no docker, no live infra.
+A learning artifact. A small CLI + design sketch around a per-action authorization primitive for AI agents — cryptographic envelopes, Ed25519-signed, short TTL, scope-narrowed from stated intent. I built it before ConductorOne launched AIAM in March 2026 and kept iterating on it because the exercise kept teaching me things.
+
+This is **not** a product pitch. The primary artifact is `NOTES.md` — an honest technical journal of what building this taught me, what it changed my mind about, and the open questions I'm still sitting with. The CLI + dashboard exist to make those notes concrete.
 
 ## What it shows
 
-The demo runs Layers 2 and 3. Layer 1 (agent discovery / supply chain) is narrated, not executed — the argument is that it exists, not that we rebuild it.
+The demo runs two scripts: a Baton entitlement-graph build, and a Carryall runtime-authorization flow against that graph.
 
 | # | Script | Layer | Who owns it |
 |---|---|---|---|
@@ -69,16 +71,18 @@ The demo pauses between layers so you can narrate. `make layer2` and `make layer
 ## Files
 
 ```
-README.md                Setup + run instructions (this file)
-ARCHITECTURE.md          The strategic one-pager
-talk_track.md            10-minute narration, timed
-Makefile                 `make demo` and friends
-backend.json             CARRYALL_SLOS_CONFIG
-scripts/02_baton.py      Layer 2: regenerate sync.c1z and preview it
-scripts/03_carryall.py   Layer 3: run the ALLOW and DENY scenarios
-vendor/_fixture.py       Synthetic .c1z builder (same shape as baton-github output)
+README.md                           Setup + run instructions (this file)
+NOTES.md                            Primary artifact — honest journal of what building taught me
+talk_track.md                       5-minute narration if shown live
+docs/architecture-pre-aiam.md       Pre-AIAM thinking, archived for honesty
+dashboard/index.html                Offline HTML design sketch (Architecture + Dashboard tabs)
+Makefile                            `make demo` and friends
+backend.json                        CARRYALL_SLOS_CONFIG
+scripts/02_baton.py                 Generate + preview the synthetic .c1z graph
+scripts/03_carryall.py              Run ALLOW + DENY scenarios with real Ed25519 envelopes
+vendor/_fixture.py                  Synthetic .c1z builder (same v1 schema baton-github emits)
 ```
 
 ## What to say if things break
 
-The demo is the backup, not the centerpiece — `ARCHITECTURE.md` is the primary artifact. If any script fails on demo day: skip to Layer 3, show the `backend.json` + `agent_to_principal` mapping, and describe the ALLOW/DENY flow from the talk track. The architecture argument doesn't depend on live output.
+`NOTES.md` is the primary artifact; the live demo is the garnish. If scripts fail on demo day, the notes stand alone. Don't debug live — the conversation after the demo is the point.

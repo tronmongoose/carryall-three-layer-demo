@@ -1,6 +1,12 @@
-PYTHON ?= python3
-AUTHORITY_RUNTIME_SRC ?= ../authority-runtime-python
+AUTHORITY_RUNTIME_SRC ?= ../carryall/authority-runtime-python
 CARRYALL_BATON_SRC    ?= ../carryall-baton-backend
+
+# Prefer a local .venv, then the authority-runtime sibling venv, then python3.
+# Override with `PYTHON=/path/to/python make ...` if you need a different interpreter.
+PYTHON ?= $(shell \
+    if   [ -x .venv/bin/python ];                           then echo .venv/bin/python; \
+    elif [ -x $(AUTHORITY_RUNTIME_SRC)/.venv/bin/python ];  then echo $(AUTHORITY_RUNTIME_SRC)/.venv/bin/python; \
+    else echo python3; fi)
 
 .PHONY: demo setup clean layer2 layer3 verify
 

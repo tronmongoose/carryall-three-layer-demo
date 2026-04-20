@@ -2,21 +2,31 @@
 
 Timings are targets; trim ruthlessly.
 
-## 0:00 – 0:45 — Setup
+## 0:00 – 0:30 — Frame
 
-> The argument in `ARCHITECTURE.md` is that agent governance needs three layers: supply chain on what an agent is made of, entitlements on what it should access, and runtime authorization on what it's doing right now. Three companies build those today. I think they should be one product. The ten minutes you're about to see is that argument, compiled into running code.
+> In ten minutes I want to lay out a thesis for an agent governance product line at C1, and show you the working prototype. Before I get to identity, let me describe the problem enterprises are actually walking into.
 
-## 0:45 – 1:15 — Layer 1: discovery (narrated, not run)
+## 0:30 – 1:30 — The problem
 
-> Before you can govern agents you have to know what agents you have. Discovery — the inventory of every agent running in the environment, what skills they've loaded, what credentials they hold — is the unglamorous but necessary starting point. Manifold and a handful of others are building this layer. I'm not rebuilding it and I'm not going to spend the demo time on it. I want the nine minutes we have left on the two layers I think C1 should own.
+> Two things enterprises don't have today, and both of them are prior to any identity question.
+>
+> One: they don't know where all their AI agents, models, and apps are. Shadow AI. Somebody in marketing wires a GPT into a Google Doc. Somebody in engineering deploys a coding agent against production. Somebody in support spins up a chatbot with a database connection. Nobody has the inventory. You can't govern what you can't see.
+>
+> Two: even for the agents they do know about, they don't know where the vulnerabilities are in the tools those agents access. Every agent loads skills, MCP servers, model providers, API clients. That's a supply chain. In the public data, roughly one in twelve skills in the largest agent-skill index is confirmed malicious. You can't trust what you haven't vetted.
+>
+> Those two gaps — inventory and vulnerability — are Layer 1 of the stack. They're necessary. Manifold and a handful of others are building that layer. I'm not rebuilding it.
 
-## 1:15 – 3:15 — Layer 2: Baton (entitlement graph)
+## 1:30 – 2:00 — The three-layer response
+
+> Governance needs three layers. Layer 1 is what I just described — discovery and supply chain, provided today by Manifold and peers. Layer 2 is the entitlement graph: who should have access to what. C1 already owns this through Baton. Layer 3 is runtime authorization: what can this specific agent do, right now, for this specific task. That layer is unclaimed. The rest of this demo is Layers 2 and 3, running.
+
+## 2:00 – 4:00 — Layer 2: Baton (entitlement graph)
 
 Run `make layer2`. Script regenerates `sync.c1z` and prints its contents.
 
 > Layer 2 is the entitlement graph — who should have access to what. ConductorOne already owns this. Baton is the open-source piece: connectors that dump any source system into a standard `.c1z` file. I'm generating a synthetic one here — same schema, same query shape as `baton-github` would produce against a real org. Three users, three repos, nine grants. Alice has admin on `acme/api`. Charlie has read on `acme/frontend` only. In production this file comes from `baton-github` against the customer's real GitHub. The adapter doesn't care.
 
-## 3:15 – 7:15 — Layer 3: Carryall (runtime authorization)
+## 4:00 – 8:00 — Layer 3: Carryall (runtime authorization)
 
 Run `make layer3`. Two scenarios print.
 
@@ -28,7 +38,7 @@ Run `make layer3`. Two scenarios print.
 
 > The thing I want to underscore: the adapter that bridges Baton into Carryall is a ~270-line class whose seven Protocol methods are the only surface Carryall touches. I added that Protocol to authority-runtime itself in the 0.4.0 release, right before this conversation. Any Baton connector — Okta, Snowflake, Salesforce — plugs in the same way. No Carryall code changes.
 
-## 7:15 – 10:00 — The ask
+## 8:00 – 10:00 — The ask
 
 > Three things I'm proposing, in priority order:
 > 1. The role we're already discussing — VP Product, path to CPO.
